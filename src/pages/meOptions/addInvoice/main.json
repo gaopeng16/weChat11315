@@ -1,0 +1,11 @@
+{
+    "navigationBarTitleText": "添加抬头",
+    "usingComponents": {
+        "i-toast": "../../../static/iview/toast/index",
+        "i-message": "../../../static/iview/message/index",
+        "i-row": "../../../static/iview/row/index",
+        "i-col": "../../../static/iview/col/index",
+        "i-button": "../../../static/iview/button/index",
+        "i-action-sheet": "../../../static/iview/action-sheet/index"
+    }
+}

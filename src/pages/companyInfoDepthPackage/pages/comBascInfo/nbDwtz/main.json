@@ -1,0 +1,9 @@
+{
+  "navigationBarTitleText": "基本信息(深度查询)",
+  "usingComponents": {
+    "i-row": "../../../../../static/iview/row/index",
+    "i-col": "../../../../../static/iview/col/index",
+    "i-tab": "../../../../../static/iview/tab/index",
+    "i-tabs": "../../../../../static/iview/tabs/index"
+  }
+}

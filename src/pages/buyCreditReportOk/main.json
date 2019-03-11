@@ -1,0 +1,6 @@
+{
+    "navigationBarTitleText": "购买成功",
+    "usingComponents": {
+        "i-toast": "../../../static/iview/toast/index"
+    }
+}

@@ -1,0 +1,7 @@
+{
+  "navigationBarTitleText": "经营风险",
+  "usingComponents": {
+    "i-row": "../../../../../static/iview/row/index",
+    "i-col": "../../../../../static/iview/col/index"
+  }
+}

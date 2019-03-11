@@ -1,0 +1,10 @@
+{
+  "navigationBarTitleText": "设置",
+  "usingComponents": {
+    "i-row": "../../../../static/iview/row/index",
+    "i-col": "../../../../static/iview/col/index",
+    "i-button": "../../../../static/iview/button/index",
+    "i-modal": "../../../../static/iview/modal/index",
+    "i-icon": "../../../../static/iview/icon/index"
+  }
+}

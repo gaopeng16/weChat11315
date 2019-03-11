@@ -1,0 +1,7 @@
+{
+    "navigationBarTitleText": "信用报告",
+    "usingComponents": {
+        "i-toast": "../../../static/iview/toast/index",
+        "i-modal": "../../../static/iview/modal/index"
+    }
+}

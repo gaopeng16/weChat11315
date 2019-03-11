@@ -1,0 +1,7 @@
+{
+  "navigationBarTitleText": "上市信息",
+  "usingComponents": {
+    "i-row": "../../../../../static/iview/row/index",
+    "i-col": "../../../../../static/iview/col/index"
+  }
+}

@@ -1,0 +1,10 @@
+{
+    "navigationBarTitleText": "发票抬头",
+    "usingComponents": {
+        "i-message": "../../../static/iview/message/index",
+        "i-toast": "../../../static/iview/toast/index",
+        "i-switch": "../../../static/iview/switch/index",
+        "i-swipeout": "../../../static/iview/swipeout/index",
+        "i-icon": "../../../static/iview/icon/index"
+    }
+}

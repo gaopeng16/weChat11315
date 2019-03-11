@@ -1,0 +1,9 @@
+{
+    "navigationBarTitleText": "会员特权",
+    "usingComponents": {
+        "i-row": "../../../static/iview/row/index",
+        "i-col": "../../../static/iview/col/index",
+        "i-tabs": "../../../static/iview/tabs/index",
+        "i-tab": "../../../static/iview/tab/index"
+    }
+}

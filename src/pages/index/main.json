@@ -1,0 +1,11 @@
+{
+  "navigationBarTitleText": "企信查",
+  "enablePullDownRefresh": true,
+  "usingComponents": {
+    "i-row": "../../../static/iview/row/index",
+    "i-col": "../../../static/iview/col/index",
+    "i-card": "../../../static/iview/card/index",
+    "i-modal": "../../../static/iview/modal/index",
+    "i-notice-bar": "../../../static/iview/notice-bar/index"
+  }
+}

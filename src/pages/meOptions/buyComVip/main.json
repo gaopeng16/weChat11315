@@ -1,0 +1,7 @@
+{
+    "navigationBarTitleText": "成为企业会员",
+    "usingComponents": {
+        "i-toast": "../../../static/iview/toast/index",
+        "i-switch": "../../../static/iview/switch/index"
+    }
+}

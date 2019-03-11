@@ -1,0 +1,7 @@
+{
+  "navigationBarTitleText": "雷达监控",
+  "usingComponents": {
+    "i-tabs": "../../../static/iview/tabs/index",
+    "i-tab": "../../../static/iview/tab/index"
+  }
+}

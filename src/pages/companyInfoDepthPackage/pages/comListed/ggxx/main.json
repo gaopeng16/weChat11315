@@ -1,0 +1,10 @@
+{
+  "navigationBarTitleText": "上市信息(深度查询)",
+  "enablePullDownRefresh": true,
+  "usingComponents": {
+    "i-row": "../../../../../static/iview/row/index",
+    "i-col": "../../../../../static/iview/col/index",
+    "i-load-more": "../../../../../static/iview/load-more/index",
+    "i-icon": "../../../../../static/iview/icon/index"
+  }
+}

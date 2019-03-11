@@ -1,0 +1,7 @@
+{
+  "navigationBarTitleText": "经营状况",
+  "usingComponents": {
+    "i-row": "../../../../../static/iview/row/index",
+    "i-col": "../../../../../static/iview/col/index"
+  }
+}

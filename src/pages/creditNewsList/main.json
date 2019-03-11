@@ -1,0 +1,9 @@
+{
+  "navigationBarTitleText": "征信新闻",
+  "backgroundTextStyle":"dark",
+  "enablePullDownRefresh": true,
+  "usingComponents": {
+    "i-load-more": "../../../static/iview/load-more/index",
+    "i-toast": "../../../static/iview/toast/index"
+  }
+}

@@ -1,0 +1,7 @@
+{
+  "navigationBarTitleText": "知识产权",
+  "usingComponents": {
+    "i-row": "../../../../../static/iview/row/index",
+    "i-col": "../../../../../static/iview/col/index"
+  }
+}

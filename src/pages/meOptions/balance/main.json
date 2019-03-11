@@ -1,0 +1,10 @@
+{
+    "navigationBarTitleText": "现金余额",
+    "usingComponents": {
+        "i-toast": "../../../static/iview/toast/index",
+        "i-row": "../../../static/iview/row/index",
+        "i-col": "../../../static/iview/col/index",
+        "i-icon": "../../../static/iview/icon/index",
+        "i-button": "../../../static/iview/button/index"
+    }
+}
