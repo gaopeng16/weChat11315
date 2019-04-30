@@ -1,5 +1,5 @@
 {
-  "navigationBarTitleText": "上市信息(深度查询)",
+  "navigationBarTitleText": "参股控股(深度查询)",
   "enablePullDownRefresh": true,
   "usingComponents": {
     "i-row": "../../../../../static/iview/row/index",

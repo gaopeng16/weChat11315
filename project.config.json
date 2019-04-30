@@ -30,12 +30,27 @@
 			"list": []
 		},
 		"miniprogram": {
-			"current": 0,
+			"current": 2,
 			"list": [
 				{
 					"id": -1,
 					"name": "更新模式模拟",
 					"pathName": "pages/index/main",
+					"query": "",
+					"scene": null
+				},
+				{
+					"id": 1,
+					"name": "雷达监控",
+					"pathName": "pages/bussUserComMonitor/main",
+					"query": "",
+					"scene": null
+				},
+				{
+					"id": 2,
+					"name": "人详情",
+					"pathName": "pages/manInfo/main",
+					"query": "humanName=陈少杰&companyName=武汉斗鱼网络科技有限公司",
 					"scene": null
 				}
 			]

@@ -75,7 +75,6 @@ export default {
           type: "abnormal"
         })
         .then(res => {
-          // console.log("res-->", res);
           if (res.data.code == 0) {
             const result = res.data.data.abnormal;
             if (

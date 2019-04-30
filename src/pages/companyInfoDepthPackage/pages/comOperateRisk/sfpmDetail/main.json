@@ -1,5 +1,5 @@
 {
-    "navigationBarTitleText": "经营风险(深度查询)",
+    "navigationBarTitleText": "司法拍卖详情(深度查询)",
     "usingComponents": {
       "i-row": "../../../../../static/iview/row/index",
       "i-col": "../../../../../static/iview/col/index"

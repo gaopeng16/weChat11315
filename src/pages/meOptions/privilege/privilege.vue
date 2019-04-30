@@ -8,11 +8,11 @@
           </div>
         </i-col>
         <i-col span="12">
-          <div class="vip">VIP会员</div>
+          <div class="vip">{{ vipLevel == 0 ? '普通会员':'VIP会员'}}</div>
           <div>{{mobile}}</div>
         </i-col>
       </i-row>
-      <a href="/pages/meOptions/vipPrivilege/main" class="look-privilege font-click">查看会员特权></a>
+      <a href="/pages/meOptions/vipPrivilege/main" class="look-privilege font-click">立即开通会员</a>
     </div>
     <div style="height:20rpx;background:#F0F0F0"></div>
     <div class="privilege-con">

@@ -74,7 +74,6 @@ export default {
           type: "appbkInfo"
         })
         .then(res => {
-          // console.log("res-->", res);
           if (res.data.code == 0) {
             const result = res.data.data.appbkInfo;
             if (

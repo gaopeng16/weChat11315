@@ -73,9 +73,13 @@ export default {
           type: "ktAnnouncement"
         })
         .then(res => {
-          //console.log("res-->", res);
           if (res.data.code == 0) {
-            const result = res.data.data.ktAnnouncement;
+            const result = res.data.data.ktAnnouncement.map(item => {
+              item.startDate = item.startDate
+                ? item.startDate.substr(0, 10)
+                : "--";
+              return item;
+            });
             if (
               (init && this.total <= config.pageSize) ||
               (result.length < config.pageSize && this.page > 1)

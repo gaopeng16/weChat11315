@@ -16,7 +16,7 @@
       >
         <BlockTitle :bt="bt" :title="item.applicationPubDate" :hasBt="true"></BlockTitle>
         <div class="lh50">
-          专利名称：
+          软件全称：
           <span class="font-click">{{item.patentName}}</span>
         </div>
         <div class="lh50">
@@ -72,9 +72,13 @@ export default {
           type: "patents"
         })
         .then(res => {
-          // console.log("res-->", res);
           if (res.data.code == 0) {
-            const result = res.data.data.patents;
+            const result = res.data.data.patents.map(item => {
+              item.applicationPubDate = item.applicationPubDate
+                ? item.applicationPubDate.substr(0, 10)
+                : "--";
+              return item;
+            });
             if (
               (init && this.total <= config.pageSize) ||
               (result.length < config.pageSize && this.page > 1)
@@ -93,7 +97,7 @@ export default {
     ledgePropertyPatentDetail(item) {
       store.commit("setLedgePropertyPatentDetailData", item);
       wx.navigateTo({
-        url: "/pages/comLedgeProperty/zlDetail/main"
+        url: "/pages/companyInfoPackage/pages/comLedgeProperty/zlDetail/main"
       });
     }
   },

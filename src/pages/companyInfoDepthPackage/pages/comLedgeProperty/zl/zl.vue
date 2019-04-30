@@ -56,7 +56,7 @@ export default {
     ledgePropertyPatentDetail(item) {
       store.commit("setLedgePropertyPatentDetailData", item);
       wx.navigateTo({
-        url: "/pages/comLedgeProperty/zlDetail/main"
+        url: "/pages/companyInfoDepthPackage/pages/comLedgeProperty/zlDetail/main"
       });
     },
     init(init) {

@@ -1,36 +1,43 @@
 <template>
   <div class="default-bg min-height100">
-    <SubTitle :title="title" :subTitle="subTitle" :total="total"></SubTitle>
-    <!--  -->
-    <div
-      class="block-shadow-content"
-      :key="index"
-      v-for="(item,index) in data"
-      @click="developmentGoodsDemandDetail(item)"
-    >
-      <BlockTitle :bt="bt" :title="item.name" :hasBt="true"></BlockTitle>
-      <div class="lh50 red">
-        采购类型：
-        <span class="red">{{item.type}}</span>
+    <ToDepthSearch
+      :url="'/pages/companyInfoDepthPackage/pages/comOperateStatus/xq/main'"
+      v-if="total <= 0"
+    ></ToDepthSearch>
+    <div v-else>
+      <DepthSearch :url="'/pages/companyInfoDepthPackage/pages/comOperateStatus/xq/main'"></DepthSearch>
+      <SubTitle :title="title" :subTitle="subTitle" :total="total"></SubTitle>
+      <!--  -->
+      <div
+        class="block-shadow-content"
+        :key="index"
+        v-for="(item,index) in data"
+        @click="developmentGoodsDemandDetail(item)"
+      >
+        <BlockTitle :bt="bt" :title="item.name" :hasBt="true"></BlockTitle>
+        <div class="lh50 red">
+          采购类型：
+          <span class="red">{{item.type}}</span>
+        </div>
+        <div class="lh50">
+          询价日期：
+          <span class="font-click">{{item.start_time}}</span>
+        </div>
+        <div class="lh50">
+          报价截止日期：
+          <span class="font-click">{{item.end_time}}</span>
+        </div>
+        <div class="lh50">
+          期望日期：
+          <span class="font-click">{{item.expect_time}}</span>
+        </div>
       </div>
-      <div class="lh50">
-        询价日期：
-        <span class="font-click">{{item.start_time}}</span>
-      </div>
-      <div class="lh50">
-        报价截止日期：
-        <span class="font-click">{{item.end_time}}</span>
-      </div>
-      <div class="lh50">
-        期望日期：
-        <span class="font-click">{{item.expect_time}}</span>
-      </div>
+      <!--  -->
+      <i-load-more v-if="more"/>
+      <i-load-more v-if="!more && page>1" :loading="more" tip="未公开更多"/>
+      <div class="bottom90"></div>
+      <Share></Share>
     </div>
-    <!--  -->
-    <i-load-more v-if="more"/>
-    <i-load-more v-if="!more && page>1" :loading="more" tip="未公开更多"/>
-    <div class="bottom90"></div>
-    <Share></Share>
   </div>
 </template>
 <script>
@@ -38,9 +45,11 @@ import store from "@/store";
 import config from "@/config.js";
 import SubTitle from "@/components/SubTitle";
 import BlockTitle from "@/components/BlockTitle";
+import ToDepthSearch from "@/components/ToDepthSearch";
+import DepthSearch from "@/components/DepthSearch";
 import Share from "@/components/Share";
 export default {
-  components: { SubTitle, BlockTitle, Share },
+  components: { SubTitle, ToDepthSearch, DepthSearch, BlockTitle, Share },
   data() {
     return {
       title: "经营状况",
@@ -67,7 +76,6 @@ export default {
           type: "demand"
         })
         .then(res => {
-          // console.log("res-->", res);
           if (res.data.code == 0) {
             const result = res.data.data.demand;
             if (

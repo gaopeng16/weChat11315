@@ -1,5 +1,5 @@
 {
-    "navigationBarTitleText": "分红情况详情",
+    "navigationBarTitleText": "分红情况详情（深度查询）",
     "usingComponents": {
         "i-row": "../../../../../../static/iview/row/index",
         "i-col": "../../../../../../static/iview/col/index"

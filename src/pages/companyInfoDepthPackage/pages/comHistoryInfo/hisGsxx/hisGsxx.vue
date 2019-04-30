@@ -249,7 +249,7 @@ export default {
     return {
       imgUrl: config.imgUrl,
       title: "历史信息",
-      subTitle: "股东信息",
+      subTitle: "工商信息",
       total: "",
       data: {},
       companyName: "",

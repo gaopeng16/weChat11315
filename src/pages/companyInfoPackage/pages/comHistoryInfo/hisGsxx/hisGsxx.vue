@@ -66,7 +66,11 @@
           </div>
           <div class="gsxx-container">
             <div class="gsxx-con" :class="[key==k?'gsxx-con-auto':'']">{{v.name}}</div>
-            <div class="font-click text-center" @click="show(k)">{{key==k?'收起':'展开'}}</div>
+            <div
+              v-if="v.name !== '无'"
+              class="font-click text-center"
+              @click="show(k)"
+            >{{key==k?'收起':'展开'}}</div>
           </div>
         </div>
       </div>

@@ -1,5 +1,5 @@
 {
-    "navigationBarTitleText": "企业发展(深度查询)",
+    "navigationBarTitleText": "竞品信息详情(深度查询)",
     "usingComponents": {
       "i-row": "../../../../../static/iview/row/index",
       "i-col": "../../../../../static/iview/col/index"

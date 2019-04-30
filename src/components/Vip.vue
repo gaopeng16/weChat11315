@@ -2,10 +2,10 @@
   <div class="vip-body">
     <div class="vip-box relative">
       <img class="vip-bg" mode="widthFix" v-if="imgUrl" :src="imgUrl+'tc_bg_vip.png'">
-      <a href="/pages/meOptions/vipPrivilege/main">
+      <a href="/pages/meOptions/privilege/main">
         <img class="vip-btn vip-btn1" mode="widthFix" v-if="imgUrl" :src="imgUrl+'tc_bg_01.png'">
       </a>
-      <a href="/pages/meOptions/buyVip/main">
+      <a href="/pages/meOptions/vipPrivilege/main">
         <img class="vip-btn vip-btn2" mode="widthFix" v-if="imgUrl" :src="imgUrl+'tc_bg_02.png'">
       </a>
     </div>

@@ -3,6 +3,7 @@
     <i-tabs :current="current" @change="handleChange">
       <i-tab key="tab1" title="VIP会员"></i-tab>
       <i-tab key="tab2" title="企业会员"></i-tab>
+      <i-tab key="tab3" title="SVIP会员"></i-tab>
     </i-tabs>
     <div v-if="current=='tab1'">
       <div class="pri-top">
@@ -25,12 +26,13 @@
         <img mode="widthFix" v-if="imgUrl" :src="imgUrl+'bg_vip2.png'">
       </div>
     </div>
+    <!--  -->
     <div v-if="current=='tab2'">
       <div class="pri-top">
         <i-row>
           <i-col span="12">
             <div class="vip-img">
-              <img mode="aspectFit" v-if="imgUrl" :src="imgUrl+'ic_vip3.png'">
+              <img mode="aspectFit" v-if="imgUrl" :src="imgUrl+'ic_vip2.png'">
             </div>
           </i-col>
           <i-col span="12">
@@ -46,6 +48,29 @@
         <img mode="widthFix" v-if="imgUrl" :src="imgUrl+'bg_vip3.png'">
       </div>
     </div>
+    <!--  -->
+    <div v-if="current=='tab3'">
+      <div class="pri-top">
+        <i-row>
+          <i-col span="12">
+            <div class="vip-img">
+              <img mode="aspectFit" v-if="imgUrl" :src="imgUrl+'svip.png'">
+            </div>
+          </i-col>
+          <i-col span="12">
+            <div class="vip font-click">SVIP会员</div>
+            <a href="/pages/meOptions/buySvip/main">
+              <div class="vip-btn">立即购买</div>
+            </a>
+          </i-col>
+        </i-row>
+      </div>
+      <div style="height:20rpx;background:#F0F0F0"></div>
+      <div class="privilege-con">
+        <img mode="widthFix" v-if="imgUrl" :src="imgUrl+'bg_vip3.png'">
+      </div>
+    </div>
+    <!--  -->
   </div>
 </template>
 <script>

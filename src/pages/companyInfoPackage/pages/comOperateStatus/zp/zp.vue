@@ -27,7 +27,7 @@
         </div>
         <div class="lh50">
           工作经验：
-          <span class="font-click">{{item.experience}}</span>
+          <span class="font-click">{{item.experienceStr?item.experienceStr:"不限"}}</span>
         </div>
         <div class="lh50">
           招聘人数：
@@ -35,7 +35,7 @@
         </div>
         <div class="lh50">
           所在城市：
-          <span class="font-click">{{item.place?item.place:"--"}}</span>
+          <span class="font-click">{{item.areaName?item.areaName:"--"}}</span>
         </div>
       </div>
       <!--  -->
@@ -82,9 +82,13 @@ export default {
           type: "employments"
         })
         .then(res => {
-          // console.log("res-->", res);
           if (res.data.code == 0) {
-            const result = res.data.data.employments;
+            const result = res.data.data.employments.map(item => {
+              item.publishTime = item.publishTime
+                ? item.publishTime.substr(0, 10)
+                : "--";
+              return item;
+            });
             if (
               (init && this.total <= config.pageSize) ||
               (result.length < config.pageSize && this.page > 1)

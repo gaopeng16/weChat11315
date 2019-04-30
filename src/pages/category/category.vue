@@ -135,6 +135,9 @@
       </i-row>
     </div>
     <i-toast id="toast"/>
+    <i-modal title="提示" :visible="loginInOther" @ok="goLogin" @cancel="noLogin">
+      <div>账号已在其他设备登录，您被强制下线！</div>
+    </i-modal>
   </div>
 </template>
 
@@ -154,11 +157,12 @@ export default {
       sffxTitle: "司法风险",
       jyfxTitle: "经营风险",
       imgUrl: config.imgUrl,
-      isLogin: false
+      isLogin: false,
+      loginInOther: false
     };
   },
   computed: {
-    ...mapState(["passOnOff"])
+    ...mapState(["passOnOff", "token"])
   },
   methods: {
     myToast(con, type) {
@@ -222,10 +226,51 @@ export default {
           url: "/pages/searchBusinessRisk/main?fx=" + title
         });
       }
+    },
+    //跳转登录页
+    goLogin() {
+      wx.navigateTo({
+        url: "/pages/login/main"
+      });
+    },
+    //不同意登录
+    noLogin() {
+      this.loginInOther = false;
+    },
+    // 检查是否异地登录
+    isLoginInOther() {
+      this.checkLogin();
+      this.loginInOther = false;
+      if (this.isLogin) {
+        this.$http
+          .post(config.host + "/pic/buss/user/loginState", {
+            userId: this.userId
+          })
+          .then(res => {
+            if (res.data.code == 0) {
+              if (this.token != res.data.data.token) {
+                wx.removeStorageSync("vuex");
+                wx.removeStorageSync("loginInfo");
+                this.loginInOther = true;
+              } else {
+                this.loginInOther = false;
+              }
+            }
+          });
+      }
     }
   },
   mounted() {
     this.checkLogin();
+  },
+  onShareAppMessage: function() {
+    return {
+      title: "我发现一款给力的信用调查小程序，超好用！棒棒哒！",
+      path: "/pages/category/main"
+    };
+  },
+  onShow() {
+    this.isLoginInOther();
   }
 };
 </script>

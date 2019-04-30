@@ -35,6 +35,7 @@
 </template>
 <script>
 import store from "@/store";
+import { mapState } from "vuex";
 import config from "@/config.js";
 import SubTitle from "@/components/SubTitle";
 import BlockTitle from "@/components/BlockTitle";
@@ -47,11 +48,13 @@ export default {
       subTitle: "动产抵押",
       total: "",
       data: [],
-      companyName: "",
       noData: false,
       page: 1,
       more: true
     };
+  },
+  computed: {
+    ...mapState(["companyName"])
   },
   methods: {
     historyHxBaseInfoDetail(item) {
@@ -110,7 +113,6 @@ export default {
     this.init();
   },
   mounted() {
-    this.companyName = this.$root.$mp.query.companyName;
     this.init(true);
   }
 };

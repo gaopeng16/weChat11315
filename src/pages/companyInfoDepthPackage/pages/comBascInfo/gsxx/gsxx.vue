@@ -29,6 +29,7 @@
 </template>
 <script>
 import store from "@/store";
+import { mapState } from "vuex";
 import config from "@/config.js";
 import { formatTime } from "@/utils";
 import SubTitle from "@/components/SubTitle";
@@ -58,6 +59,9 @@ export default {
       bt16: "经营范围",
       data: {}
     };
+  },
+  computed: {
+    ...mapState(["companyName"])
   },
   methods: {
     init() {
@@ -94,7 +98,6 @@ export default {
     }
   },
   mounted() {
-    this.companyName = this.$root.$mp.query.companyName;
     this.init();
   }
 };

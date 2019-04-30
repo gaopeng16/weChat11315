@@ -76,7 +76,14 @@ export default {
         })
         .then(res => {
           if (res.data.code == 0) {
-            const result = res.data.data.punishmentInfo;
+            const result = res.data.data.punishmentInfo.map(item => {
+              item.pendecissdate = item.pendecissdate
+                ? item.pendecissdate.substr(0, 10)
+                : "--";
+              item.pubdate = item.pubdate ? item.pubdate.substr(0, 10) : "--";
+
+              return item;
+            });
             if (
               (init && this.total <= config.pageSize) ||
               (result.length < config.pageSize && this.page > 1)

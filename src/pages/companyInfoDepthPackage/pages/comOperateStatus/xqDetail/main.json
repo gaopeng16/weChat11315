@@ -1,5 +1,5 @@
 {
-  "navigationBarTitleText": "经营状况(深度查询)",
+  "navigationBarTitleText": "需求详情(深度查询)",
   "usingComponents": {
     "i-row": "../../../../../static/iview/row/index",
     "i-col": "../../../../../static/iview/col/index"

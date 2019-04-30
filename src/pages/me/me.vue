@@ -7,14 +7,12 @@
       </div>
       <div class="username">{{loginInfo.username}}</div>
       <div v-if="loginInfo.isVip" class="text-center white">到期时间：{{expireDate}}</div>
-      <a href="/pages/meOptions/buyVip/main">
-        <div v-if="passOnOff" class="vip-pay">
-          <div class="left vip-icon">
-            <img mode="aspectFit" v-if="imgUrl" :src="imgUrl+'my_vip.png'">
-          </div>
-          <span class="left font-click">{{loginInfo.isVip?'续费':'购买'}}</span>
+      <div v-if="passOnOff" class="vip-pay" @click="goOnBuy">
+        <div class="left vip-icon">
+          <img mode="aspectFit" v-if="imgUrl" :src="imgUrl+'my_vip.png'">
         </div>
-      </a>
+        <span class="left font-click">{{loginInfo.isVip?'续费':'购买'}}</span>
+      </div>
     </div>
     <i-row i-class="user-top-group">
       <i-col span="6">
@@ -60,6 +58,17 @@
           <img mode="aspectFit" v-if="imgUrl" :src="imgUrl+'my_viptq.png'">
         </div>
         <div class="list-name">{{isLogin?(loginInfo.isVip?'会员特权':'成为VIP会员'):"成为会员"}}</div>
+        <div class="list-arrow">
+          <i-icon type="enter"></i-icon>
+        </div>
+      </li>
+      <li v-if="passOnOff" class="user-detail-list-line">
+        <div class="list-img">
+          <img mode="aspectFit" v-if="imgUrl" :src="imgUrl+'set_fx.png'">
+        </div>
+        <div class="list-name">
+          <button class="share-btn" open-type="share" plain="true">分享给好友</button>
+        </div>
         <div class="list-arrow">
           <i-icon type="enter"></i-icon>
         </div>
@@ -128,11 +137,15 @@
     </ul>
     <div style="height:30rpx;"></div>
     <i-toast id="toast"/>
+    <i-modal title="提示" :visible="loginInOther" @ok="goLogin" @cancel="noLogin">
+      <div>账号已在其他设备登录，您被强制下线！</div>
+    </i-modal>
   </div>
 </template>
 <script>
 import config from "@/config";
 import store from "@/store";
+import { mapState } from "vuex";
 const { $Toast } = require("../../../static/iview/base/index");
 export default {
   data() {
@@ -148,11 +161,13 @@ export default {
         nickName: "",
         avatarUrl: +"ic_head_default.png"
       },
+      vipLevel: 0,
       loginInfo: {
         username: "未登录",
         headPic: config.imgUrl + "ic_head_default.png",
         isVip: 0
-      }
+      },
+      loginInOther: false
     };
   },
   methods: {
@@ -162,7 +177,7 @@ export default {
       });
     },
     goLogin() {
-      if (!this.isLogin) {
+      if (this.isLogin) {
         wx.navigateTo({
           url: "/pages/login/main"
         });
@@ -173,6 +188,7 @@ export default {
       if (loginInfo) {
         this.loginInfo.username = loginInfo.mobile;
         this.loginInfo.isVip = loginInfo.vipLevel;
+        this.vipLevel = loginInfo.vipLevel;
         this.loginInfo.headPic = loginInfo.headPic
           ? config.imgFile + loginInfo.headPic
           : config.imgUrl + "ic_head_default.png";
@@ -185,6 +201,7 @@ export default {
         this.loginInfo.isVip = 0;
         this.isLogin = false;
       }
+      this.isLoginInOther();
       /* const userInfo = JSON.parse(wx.getStorageSync("userInfo"))
       if(userInfo){
         this.userInfo = {
@@ -201,6 +218,22 @@ export default {
         });
       } else {
         this.myToast("请先登录");
+      }
+    },
+    // 续费
+    goOnBuy() {
+      if (this.vipLevel == 1 || this.vipLevel == 0) {
+        wx.navigateTo({
+          url: "/pages/meOptions/buyVip/main"
+        });
+      } else if (this.vipLevel == 4) {
+        wx.navigateTo({
+          url: "/pages/meOptions/buyComVip/main"
+        });
+      } else if (this.vipLevel == 5) {
+        wx.navigateTo({
+          url: "/pages/meOptions/buySvip/main"
+        });
       }
     },
     // 我的关注
@@ -333,9 +366,35 @@ export default {
           }
         }
       });
+    },
+    //不同意登录
+    noLogin() {
+      this.loginInOther = false;
+    },
+    // 检查是否异地登录
+    isLoginInOther() {
+      this.loginInOther = false;
+      if (this.isLogin) {
+        this.$http
+          .post(config.host + config.loginState, {
+            userId: this.userId
+          })
+          .then(res => {
+            if (res.data.code == 0) {
+              if (this.token != res.data.data.token) {
+                wx.removeStorageSync("vuex");
+                wx.removeStorageSync("loginInfo");
+                this.loginInOther = true;
+              } else {
+                this.loginInOther = false;
+              }
+            }
+          });
+      }
     }
   },
   computed: {
+    ...mapState(["token"]),
     passOnOff() {
       return store.state.passOnOff;
     },
@@ -345,6 +404,12 @@ export default {
   },
   mounted() {
     this._hasAuth();
+  },
+  onShareAppMessage: function() {
+    return {
+      title: "我发现一款给力的信用调查小程序，超好用！棒棒哒！",
+      path: "/pages/index/main"
+    };
   },
   onShow() {
     this.getUserInfo();
@@ -457,6 +522,16 @@ export default {
     }
     .list-name {
       float: left;
+      button {
+        width: 597rpx;
+        height: 80rpx;
+        line-height: 80rpx;
+        overflow: hidden;
+        font-size: 28rpx;
+        padding: 0;
+        text-align: left;
+        border: none;
+      }
     }
     .list-arrow {
       float: right;

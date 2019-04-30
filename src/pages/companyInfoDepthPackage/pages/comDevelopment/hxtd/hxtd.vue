@@ -4,9 +4,15 @@
     <div v-else>
       <SubTitle :title="title" :subTitle="subTitle" :total="total"></SubTitle>
       <!--  -->
-      <div class="block-shadow-content overflow-hidden" :key="index" v-for="(item,index) in data">
+      <div
+        class="block-shadow-content overflow-hidden"
+        :key="index"
+        v-for="(item,index) in data"
+        @click="hxtdDetail(item)"
+      >
         <div class="core-term-face left">
-          <img v-if="imgUrl" :src="imgUrl+'logo_n.png'">
+          <img v-if="item.icon" :src="item.icon">
+          <img v-else-if="imgUrl" :src="imgUrl+'logo_n.png'">
         </div>
         <div class="core-term-right left">
           <div class="title lh70 font-click blod">{{item.name}}</div>
@@ -26,6 +32,7 @@
 </template>
 <script>
 import store from "@/store";
+import { mapState } from "vuex";
 import config from "@/config.js";
 import SubTitle from "@/components/SubTitle";
 import BlockTitle from "@/components/BlockTitle";
@@ -39,11 +46,13 @@ export default {
       subTitle: "核心团队",
       total: "",
       data: [],
-      companyName: "",
       noData: false,
       page: 1,
       more: true
     };
+  },
+  computed: {
+    ...mapState(["companyName"])
   },
   methods: {
     init(init) {
@@ -63,6 +72,13 @@ export default {
               this.total = res.data.result.total;
               const result = res.data.result.items.map(item => {
                 item.title = item.title.split("&");
+                this.$http
+                  .post(config.typImg, { imgUrl: item.icon, imgId: new Date() })
+                  .then(res => {
+                    if (res.data.code == 0) {
+                      item.icon = res.data.data.newImgUrl;
+                    }
+                  });
                 return item;
               });
               if (
@@ -85,6 +101,12 @@ export default {
             this.noData = true;
           }
         });
+    },
+    hxtdDetail(item) {
+      store.commit("setDevelopmentHxtdDetailData", item);
+      wx.navigateTo({
+        url: "/pages/companyInfoDepthPackage/pages/comDevelopment/hxtdDetail/main"
+      });
     }
   },
   onPullDownRefresh() {
@@ -98,7 +120,6 @@ export default {
     this.init();
   },
   mounted() {
-    this.companyName = this.$root.$mp.query.companyName;
     this.init(true);
   }
 };
@@ -126,6 +147,11 @@ export default {
       margin: 0 15rpx 0 0;
       color: #ffffff;
     }
+  }
+  .sub-content {
+    line-height: 36rpx;
+    max-height: 178rpx;
+    overflow: hidden;
   }
 }
 .red {

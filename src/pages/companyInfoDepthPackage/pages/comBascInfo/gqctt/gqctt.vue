@@ -24,10 +24,7 @@ export default {
     };
   },
   computed: {
-    ...mapState(["vipLevel"]),
-    companyId() {
-      return store.state.companyDetailsData.basicInfo.basic.id;
-    }
+    ...mapState(["vipLevel", "companyId"])
   },
   methods: {
     checkLogin() {

@@ -32,7 +32,10 @@ export default {
           if (res.data.code == 0) {
             if (res.data.data) {
               this.src =
-                this.host + "/test.html#/show?ids=" + this.companyId + "&app=app";
+                this.host +
+                "/test.html#/show?ids=" +
+                this.companyId +
+                "&app=app";
             } else {
               this.src =
                 this.host + "/company/diagram_iframe.html?id=" + this.companyId;
@@ -43,7 +46,7 @@ export default {
   },
   computed: {
     companyId() {
-      return store.state.companyDetailsData.basicInfo.basic.id;
+      return this.$store.state.companyId;
     }
   },
   mounted() {

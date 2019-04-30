@@ -45,7 +45,7 @@ export default {
   data() {
     return {
       title: "经营风险",
-      subTitle: "经营异常",
+      subTitle: "行政处罚",
       total: "",
       bt: "处罚文书号",
       data: [],
@@ -68,18 +68,11 @@ export default {
           pageNum: this.page
         })
         .then(res => {
+          console.log('行政处罚',res)
           if (res.data.reason === "ok") {
             if (res.data.result.total > 0) {
               this.total = res.data.result.total;
-              const result = res.data.result.items.map(item => {
-                item.decisionDate = item.decisionDate
-                  ? formatTime(new Date(Number(item.decisionDate)))
-                  : "--";
-                item.publishDate = item.publishDate
-                  ? formatTime(new Date(Number(item.publishDate)))
-                  : "--";
-                return item;
-              });
+              const result = res.data.result.items;
               if (
                 (init && result.length < config.pageSize) ||
                 (result.length < config.pageSize && this.page > 1)

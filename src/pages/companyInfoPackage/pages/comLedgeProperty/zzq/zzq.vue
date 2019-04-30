@@ -16,8 +16,8 @@
         <div class="block-shadow-content" :key="index" v-for="(item,index) in data1">
           <BlockTitle :bt="bt1" :title="item.registrationDate" :hasBt="true"></BlockTitle>
           <div class="lh50">
-            软件全程：
-            <span class="font-click">{{item.softwareAbbreviation}}</span>
+            软件全称：
+            <span class="font-click">{{item.softwareName}}</span>
           </div>
           <div class="lh50">
             登记号：
@@ -40,7 +40,7 @@
             <span class="font-click">{{item.copyrightOwnerNationality}}</span>
           </div>
           <div class="lh50">
-            首次发表日期
+            首次发表日期：
             <span
               class="font-click"
             >{{item.firstPublicationDate?item.firstPublicationDate:"企业选择不公开"}}</span>
@@ -101,7 +101,7 @@ export default {
   data() {
     return {
       title: "知识产权",
-      subTitle: "专利",
+      subTitle: "著作权",
       total: "",
       bt1: "登记日期",
       current: "tab1",
@@ -133,10 +133,13 @@ export default {
               item.registrationDate = item.registrationDate
                 ? item.registrationDate.substr(0, 10)
                 : "--";
+              item.firstPublicationDate = item.firstPublicationDate
+                ? item.firstPublicationDate.substr(0, 10)
+                : "--";
               return item;
             });
             if (
-              (init && this.total <= config.pageSize) ||
+              (init && result.length <= config.pageSize) ||
               (result.length < config.pageSize && this.page1 > 1)
             ) {
               this.more1 = false;
@@ -163,15 +166,24 @@ export default {
           type: "copyRegWorks"
         })
         .then(res => {
-          // console.log("res-->", res);
           if (res.data.code == 0) {
-            const result = res.data.data.copyRegWorks;
+            const result = res.data.data.copyRegWorks.map(item => {
+              item.publishtime = item.publishtime
+                ? item.publishtime.substr(0, 10)
+                : "--";
+              item.finishTime = item.finishTime
+                ? item.finishTime.substr(0, 10)
+                : "--";
+              item.regTime = item.regTime ? item.regTime.substr(0, 10) : "--";
+              return item;
+            });
             if (
-              (init && this.total <= config.pageSize) ||
+              (init && result.length <= config.pageSize) ||
               (result.length < config.pageSize && this.page2 > 1)
             ) {
               this.more2 = false;
             }
+            console.log('312312')
             if (init) {
               this.data2 = result;
               wx.stopPullDownRefresh();

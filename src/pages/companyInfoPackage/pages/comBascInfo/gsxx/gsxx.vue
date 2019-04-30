@@ -86,7 +86,6 @@ export default {
           companyId: this.companyId
         })
         .then(res => {
-          console.log("gsxx", res);
           if (res.data.code == 0) {
             res.data.data.comBasic.registrationDate = res.data.data.comBasic.registrationDate.substr(
               0,

@@ -76,7 +76,12 @@ export default {
         })
         .then(res => {
           if (res.data.code == 0) {
-            const result = res.data.data.websiteApprove;
+            const result = res.data.data.websiteApprove.map(item => {
+              item.auditDate = item.auditDate
+                ? item.auditDate.substr(0, 10)
+                : "--";
+              return item;
+            });
             if (
               (init && this.total <= config.pageSize) ||
               (result.length < config.pageSize && this.page > 1)

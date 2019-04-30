@@ -7,13 +7,21 @@
     <div class="bind-con" v-if="isActive">
       <div class="input-line">
         <div class="phone-input">
-          <i-input
+          <input
+            class="myinput phone-input1"
+            type="number"
+            v-model="phoneNum"
+            maxlength="11"
+            placeholder="请输入手机号"
+          >
+          <!-- <i-input
+            id="numberV"
             type="number"
             maxlength="11"
             @change="getPhoneNumberV"
             mode="wrapped"
-            placeholder="请输入手机号"
-          />
+            placeholder="请输入手机号1"
+          />-->
         </div>
         <div class="get-verify">
           <i-button
@@ -30,13 +38,20 @@
     </div>
     <div class="bind-con" v-if="!isActive">
       <div class="input-line">
-        <i-input
+        <input
+          class="myinput phone-input2"
+          type="number"
+          v-model="phoneNum"
+          maxlength="11"
+          placeholder="请输入手机号"
+        >
+        <!-- <i-input
           type="number"
           mode="wrapped"
           maxlength="11"
           @change="getPhoneNumberP"
-          placeholder="请输入手机号"
-        />
+          placeholder="请输入手机号2"
+        />-->
       </div>
       <div class="input-line">
         <i-input
@@ -62,7 +77,7 @@
 <script>
 import config from "@/config.js";
 import { mapMutations } from "vuex";
-import { SET_VIPLEVEL, SET_SIGN } from "@/store/mutation-types";
+import { SET_VIPLEVEL, SET_SIGN, SET_TOKEN } from "@/store/mutation-types";
 import NavigateBar from "@/components/NavigateBar";
 const { $Toast } = require("../../../static/iview/base/index");
 export default {
@@ -71,6 +86,7 @@ export default {
     return {
       navTitle: "登录",
       imgUrl: config.imgUrl,
+      phoneNum: "",
       phoneNumberV: "",
       phoneNumberP: "",
       password: "",
@@ -91,33 +107,35 @@ export default {
   methods: {
     ...mapMutations({
       setVipLevel: SET_VIPLEVEL,
-      setSign: SET_SIGN
+      setSign: SET_SIGN,
+      setToken: SET_TOKEN
     }),
     myToast(con) {
       $Toast({
         content: con
       });
     },
-    getPhoneNumberV(e) {
+    /* getPhoneNumberV(e) {
       this.phoneNumberV = e.target.detail.value;
+      console.log(document.getElementById("numberV"));
       if (this.phoneNumberV.length == 11) {
         this.canGetVerify = false;
       } else {
         this.canGetVerify = true;
       }
-    },
+    }, */
     getVerify(e) {
       this.verify = e.target.detail.value;
     },
-    getPhoneNumberP(e) {
+    /* getPhoneNumberP(e) {
       this.phoneNumberP = e.target.detail.value;
-    },
+    }, */
     getPassword(e) {
       this.password = e.target.detail.value;
-      if (this.phoneNumberP === "") {
+      if (this.phoneNum === "") {
         this.myToast("请填写手机号!");
       } else {
-        if (!/^1[34578]\d{9}$/.test(this.phoneNumberP)) {
+        if (!/^1[34578]\d{9}$/.test(this.phoneNum)) {
           this.myToast("手机号不合法!");
         } else {
           if (this.password.length >= 6) {
@@ -135,15 +153,15 @@ export default {
       if (this.canGetVerify) {
         return;
       }
-      if (this.phoneNumberV === "") {
+      if (this.phoneNum === "") {
         this.myToast("请填写手机号!");
       } else {
-        if (!/^1[34578]\d{9}$/.test(this.phoneNumberV)) {
+        if (!/^1[34578]\d{9}$/.test(this.phoneNum)) {
           this.myToast("手机号不合法!");
         } else {
           this.$http
             .post(config.getVerify, {
-              iphone: this.phoneNumberV,
+              iphone: this.phoneNum,
               type: "verification_code"
             })
             .then(res => {
@@ -171,8 +189,9 @@ export default {
       let _this = this;
       this.$http
         .post(config.loginByVerify, {
-          iphone: this.phoneNumberV,
-          verificationCode: this.verify
+          iphone: this.phoneNum,
+          verificationCode: this.verify,
+          device:'minpro'
         })
         .then(res => {
           if (res.data.code == 0) {
@@ -187,6 +206,7 @@ export default {
             wx.setStorageSync("loginInfo", loginInfo);
             _this.setVipLevel(loginInfo.vipLevel);
             _this.setSign(res.data.data.sign);
+            _this.setToken(res.data.data.token);
             wx.switchTab({
               url: "/pages/index/main"
             });
@@ -199,8 +219,9 @@ export default {
       let _this = this;
       this.$http
         .post(config.loginByPass, {
-          iphone: this.phoneNumberP,
-          password: this.password
+          iphone: this.phoneNum,
+          password: this.password,
+          device:'minpro'
         })
         .then(res => {
           if (res.data.code == 0) {
@@ -215,8 +236,9 @@ export default {
             wx.setStorageSync("loginInfo", loginInfo);
             _this.setVipLevel(loginInfo.vipLevel);
             _this.setSign(res.data.data.sign);
+            _this.setToken(res.data.data.token);
             wx.switchTab({
-              url: "/pages/index/main"
+              url: "/pages/me/main"
             });
           } else {
             this.myToast(res.data.message);
@@ -237,7 +259,7 @@ export default {
       const user = wx.getStorageSync("user");
       if (user) {
         this.$http
-          .post(config.checkBindPhone, { type: "wx", qqOrWxNum: user.openid })
+          .post(config.checkBindPhone, { type: "wx", qqOrWxNum: user.openid,device:'minpro' })
           .then(res => {
             if (res.data.code == 0) {
               this.isBind = true;
@@ -252,6 +274,7 @@ export default {
               wx.setStorageSync("loginInfo", loginInfo);
               _this.setVipLevel(loginInfo.vipLevel);
               _this.setSign(res.data.data.sign);
+              _this.setToken(res.data.data.token);
               wx.switchTab({
                 url: "/pages/index/main"
               });
@@ -268,6 +291,16 @@ export default {
   },
   onShow() {
     this.isBind = true;
+    this.phoneNum = "";
+  },
+  watch: {
+    phoneNum: function(val, oldVal) {
+      if (val.length == 11) {
+        this.canGetVerify = false;
+      } else {
+        this.canGetVerify = true;
+      }
+    }
   }
 };
 </script>
@@ -313,6 +346,23 @@ export default {
       text-align: center;
       margin-bottom: 40rpx;
       font-size: 12px;
+    }
+    .myinput {
+      box-sizing: border-box;
+      min-height: 77rpx;
+      line-height: 77rpx;
+      padding: 4px 10px;
+      background: #ffffff;
+      color: black;
+    }
+    .phone-input1 {
+      width: 95%;
+      margin-left: 5%;
+      margin-top: 10px;
+    }
+    .phone-input2 {
+      width: 92%;
+      margin-left: 4%;
     }
   }
   .wechat-login {

@@ -16,6 +16,9 @@ const mutations = {
     [type.SET_SIGN](state, v) {
         state.sign = Object.assign(state.sign, v)
     },
+    [type.SET_TOKEN](state, v) {
+        state.token = v
+    },
     [type.SET_VIPLEVEL](state, v) {
         state.vipLevel = v
     },
@@ -27,6 +30,12 @@ const mutations = {
     },
     [type.SET_JUDGMENT_CONTENT](state, v) {
         state.judgmentContent = v
+    },
+    [type.SET_DAILY_REPORT](state, v) {
+        state.dailyReportData = v
+    },
+    [type.SET_MONITOR_DETAIL](state, v) {
+        state.monitorDetailData = v
     },
     [type.SET_DETAIL_CONTENT](state, v) {
         state.detailContent = v
@@ -63,6 +72,9 @@ const mutations = {
     },
     [type.SET_JUDICIAL_DETAIL_DATA](state, v) {
         state.judicialDetailData = v
+    },
+    [type.SET_DEVELOPMENT_HXTD_DETAIL_DATA](state, v) {
+        state.developmentHxtdDetailData = v
     },
     [type.SET_DEVELOPMENT_COMPETITION_DETAIL_DATA](state, v) {
         state.developmentCompetitionDetailData = v

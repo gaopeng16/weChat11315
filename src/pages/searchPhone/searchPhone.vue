@@ -5,7 +5,7 @@
     <div class="search-group">
       <i-row>
         <i-col span="19">
-          <input v-model="keyWord" class="search-input" type="text" placeholder="请输入著作权名、登记号或公司名称">
+          <input v-model="keyWord" class="search-input" type="text" placeholder="请输入您要搜索的电话号码">
         </i-col>
         <i-col span="5">
           <i-button i-class="my-search-btn" type="warning" @click="goSearch(true)">搜索</i-button>
@@ -57,7 +57,7 @@
         <img class="company-logo" :src="item.logoUrl">
         <div class="com-info title cname">{{item.companyName}}</div>
         <div class="com-info">
-          <span class="left">电话: {{item.contactWay}}</span>
+          <span class="left red">电话: {{item.contactWay}}</span>
         </div>
         <div class="com-info">注册资本: {{item.registeredCapital+item.registeredCapitalUnit}}</div>
         <div class="com-info">成立日期: {{item.registrationDate}}</div>
@@ -185,6 +185,7 @@ export default {
             page: this.page
           })
           .then(res => {
+            console.log('找点哈',res)
             utils.hideLoading();
             this.isGoSearch = true;
             if (res.data.code == 0) {

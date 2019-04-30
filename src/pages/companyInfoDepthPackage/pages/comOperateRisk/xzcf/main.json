@@ -1,5 +1,5 @@
 {
-  "navigationBarTitleText": "经营风险(深度查询)",
+  "navigationBarTitleText": "行政处罚(深度查询)",
   "enablePullDownRefresh": true,
   "usingComponents": {
     "i-load-more": "../../../../../static/iview/load-more/index",

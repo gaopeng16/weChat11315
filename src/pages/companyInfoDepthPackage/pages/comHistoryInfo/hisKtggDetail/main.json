@@ -1,5 +1,5 @@
 {
-  "navigationBarTitleText": "历史信息(深度查询)",
+  "navigationBarTitleText": "开庭公告详情(深度查询)",
   "usingComponents": {
     "i-row": "../../../../../static/iview/row/index",
     "i-col": "../../../../../static/iview/col/index"

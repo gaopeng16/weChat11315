@@ -31,11 +31,15 @@
       </i-col>
     </i-row>
     <i-toast id="toast"/>
+    <i-modal title="提示" :visible="loginInOther" @ok="goLogin" @cancel="noLogin">
+      <div>账号已在其他设备登录，您被强制下线！</div>
+    </i-modal>
   </div>
 </template>
 <script>
 import config from "@/config.js";
 import store from "@/store";
+import { mapState } from "vuex";
 import NavigateBar from "@/components/NavigateBar";
 const { $Toast } = require("../../../static/iview/base/index");
 export default {
@@ -44,8 +48,12 @@ export default {
     return {
       navTitle: "发现",
       imgUrl: config.imgUrl,
-      isLogin: false //判断是否登录
+      isLogin: false, //判断是否登录
+      loginInOther: false
     };
+  },
+  computed: {
+    ...mapState(["token"])
   },
   methods: {
     myToast(con, type) {
@@ -72,9 +80,12 @@ export default {
     //找关系
     goSearch(type) {
       if (this.isLogin) {
-        this.globalData.searchType = type;
-        wx.switchTab({
+        /*this.globalData.searchType = type;
+         wx.switchTab({
           url: "/pages/search/main"
+        }); */
+        wx.navigateTo({
+          url: "/pages/findRelationship/main"
         });
       } else {
         this.myToast("请先登录!", "warning");
@@ -88,15 +99,48 @@ export default {
       } else {
         this.myToast("请先登录!", "warning");
       }
+    },
+    //不同意登录
+    noLogin() {
+      this.loginInOther = false;
+    },
+    // 检查是否异地登录
+    isLoginInOther() {
+      this.checkLogin();
+      this.loginInOther = false;
+      if (this.isLogin) {
+        this.$http
+          .post(config.host + config.loginState, {
+            userId: this.userId
+          })
+          .then(res => {
+            if (res.data.code == 0) {
+              if (this.token != res.data.data.token) {
+                wx.removeStorageSync("vuex");
+                wx.removeStorageSync("loginInfo");
+                this.loginInOther = true;
+              } else {
+                this.loginInOther = false;
+              }
+            }
+          });
+      }
     }
   },
   mounted() {
     this.checkLogin();
   },
+  onShareAppMessage: function() {
+    return {
+      title: "我发现一款给力的信用调查小程序，超好用！棒棒哒！",
+      path: "/pages/find/main"
+    };
+  },
   onShow() {
     if (!this.isLogin) {
       this.checkLogin();
     }
+    this.isLoginInOther();
   }
 };
 </script>

@@ -86,8 +86,8 @@ export default {
     courtLawDetail() {
       return store.state.courtLawDetailData;
     },
-    pubDate(){
-      return formatTime(new Date(this.courtLawDetail.pubDate))
+    pubDate() {
+      return formatTime(new Date(this.courtLawDetail.pubDate), 0);
     }
   }
 };

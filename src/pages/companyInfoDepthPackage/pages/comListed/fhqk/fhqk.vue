@@ -87,7 +87,7 @@ export default {
     fhqkDetails(item) {
       store.commit("setFhqkDetailData", item);
       wx.navigateTo({
-        url: "/pages/companyInfoPackage/pages/comListed/fhqkDetail/main"
+        url: "/pages/companyInfoDepthPackage/pages/comListed/fhqkDetail/main"
       });
     }
   },

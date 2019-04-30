@@ -1,5 +1,5 @@
 {
-  "navigationBarTitleText": "知识产权(深度查询)",
+  "navigationBarTitleText": "专利详情(深度查询)",
   "usingComponents": {
     "i-row": "../../../../../static/iview/row/index",
     "i-col": "../../../../../static/iview/col/index"

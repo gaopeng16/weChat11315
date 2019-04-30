@@ -11,7 +11,7 @@
       <div class="block-shadow-content" :key="index" v-for="(item,index) in data">
         <div>
           <ManFace v-if="item.logo" :imgSrc="item.logo"></ManFace>
-          <LastName v-else :lastname="item.name"></LastName>
+          <LastName v-else :lastname="item.lastname"></LastName>
           <div class="lh70 font-click ml15 left">{{item.name}}</div>
         </div>
         <div class="clearboth"></div>
@@ -90,6 +90,7 @@ export default {
               item.capital[0].time = item.capital[0].time
                 ? item.capital[0].time.substr(0, 10)
                 : "--";
+              item.lastname = item.name.substr(0, 1);
               return item;
             });
             if (

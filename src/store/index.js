@@ -20,7 +20,8 @@ export default new Vuex.Store({
                 return {
                     // 只储存state中的sign，vipLevel
                     vipLevel: val.vipLevel,
-                    sign: val.sign
+                    sign: val.sign,
+                    token: val.token
                 }
             }
         })

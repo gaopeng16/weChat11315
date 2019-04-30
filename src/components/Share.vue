@@ -1,4 +1,4 @@
-<template>
+                                                                                                                                                                                      <template>
   <div class="share-body">
     <div class="share-body">
       <div class="go-index left" @click="goHome">

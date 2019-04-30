@@ -45,6 +45,7 @@
 </template>
 <script>
 import store from "@/store";
+import { mapState } from "vuex";
 import config from "@/config.js";
 import { formatTime } from "@/utils";
 import SubTitle from "@/components/SubTitle";
@@ -60,11 +61,13 @@ export default {
       total: "",
       bt: "时间",
       data: [],
-      companyName: "",
       noData: false,
       page: 1,
       more: true
     };
+  },
+  computed: {
+    ...mapState(["companyName"])
   },
   methods: {
     init(init) {
@@ -121,7 +124,6 @@ export default {
     this.init();
   },
   mounted() {
-    this.companyName = this.$root.$mp.query.companyName;
     this.init(true);
   }
 };

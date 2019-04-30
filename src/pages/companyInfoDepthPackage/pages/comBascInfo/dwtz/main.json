@@ -1,5 +1,5 @@
 {
-  "navigationBarTitleText": "基本信息(深度查询)",
+  "navigationBarTitleText": "对外投资(深度查询)",
   "enablePullDownRefresh": true,
   "usingComponents": {
     "i-load-more": "../../../../../static/iview/load-more/index",

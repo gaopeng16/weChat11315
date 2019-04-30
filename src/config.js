@@ -3,7 +3,7 @@ const hostPay = "https://spay.pic11315.com"
 const config = {
   appId: "wxa4d803725b952d06",
   APPSecret: "8092cca8ecbbf551b8c1068a3c8fbed5",
-  version: "1.1.9",
+  version: "1.3.1",
   invitePrice: 39, //购买会员填写邀请码减免金额
   host,
   hostPay,
@@ -36,16 +36,22 @@ const config = {
   loginByVerify: "/app/buss/user/logInByVerificationCode",
   //注册{iphone,userVerificationCode,password,repassword,%invitationCode}
   register: "/app/buss/user/register",
+  // 获取登录信息
+  loginState: "/app/buss/user/loginState",
   //获取热搜
   hotBotUrl: "/app/buss/hotSport/hotSport",
   // 查看信用报告下载次数
   selectReportNum: "/app/buss/user/selectReportNum",
   // 信用报告剩余下载次数
-  reportNum:"/app/buss/userdownloadtime/residualTimes",
+  reportNum: "/app/buss/userdownloadtime/residualTimes",
   // 普通会员（一年。两年，三年vip）
-  appGetOrdinaryVIP:"/app/buss/payProduct/appGetOrdinaryVIP",
+  appGetOrdinaryVIP: "/app/buss/payProduct/appGetOrdinaryVIP",
   // 企业会员VIP
-  appGetEnterpriseVIP:"/app/buss/payProduct/appGetEnterpriseVIP",
+  appGetEnterpriseVIP: "/app/buss/payProduct/appGetEnterpriseVIP",
+  //SVIP会员
+  appGetSuperVIP: "/app/buss/payProduct/appGetSuperVIP",
+  //VIP升级SVIP
+  appGetToSuperVIP: "/app/buss/payProduct/appGetToSuperVIP",
   //普通搜索(注意后面跟了变量参数详情在search.vue可查询){tremStr:"关键字","page":1}
   generalSearch: "/app/search/termSearch/",
   /**
@@ -123,8 +129,12 @@ const config = {
   area: "/app/buss/region/list",
   // 获取图片验证码 /userId
   kaptcha: "/pic/app/down/buss/kaptcha/",
+  // 监控动态提示
+  queryRadarDailyTips:"/app/buss/radarmain/queryRadarDailyTips",
   // 雷达监控 {userId}
   bussUserComMonitor: "/app/buss/bussUserComMonitor/getMonitorByUserId",
+  // 监控动态
+  queryRadarByUserId: '/app/buss/radarmain/queryRadarByUserId',
   // 保存发票抬头
   addInvoice: "/app/buss/bussInvoice/appAddInvoice",
   //新加公司
@@ -180,6 +190,9 @@ const config = {
   // 企业（深度）
   companyName: "/app/buss/tyc/companyName",
   /************************ 上市信息 **************************/
+  // 企信风险
+  riskInfo: "http://open.api.tianyancha.com/services/v4/open/riskInfo?name=",
+  riskItemDetail: "/app/buss/tyc/riskDetailId",
   // 企业简介
   companyInfoDe: "http://open.api.tianyancha.com/services/v4/open/companyInfo?name=",
   // 参股控股
@@ -365,83 +378,3 @@ const config = {
   bindEmail: "/app/buss/user/bindingEmail"
 };
 export default config;
-
-/**
- * 详情页新接口  type 值
- * * 获取公司详情信息
-     * abnormal经营异常
-     * announcement上市公告
-     * annualReport企业年报
-     * baseInfoV3企业基本信息（含主要人员）
-     * beExecuted被执行人
-     * bids招投标
-     * branch分支机构
-     * certificate资质证书
-     * changeInfo变更记录
-     * checkInfo抽查检查
-     * copyReg著作权
-     * courtAnnouncement法院公告
-     * description获取人简介
-     * dishonest失信人
-     * employments招聘
-     * equityInfo股权出质
-     * financingHistory融资历史
-     * holder股东信息
-     * holdingCompany参股控股（股票）
-     * illegalInfo严重违法
-     * invest对外投资
-     * investments投资事件
-     * judicialSale司法拍卖
-     * ktAnnouncement开庭公告
-     * lawSuit法律诉讼
-     * mortgageInfo动产抵押
-     * news新闻信息
-     * ownTax欠税公告
-     * patents专利
-     * publicWeChat微信公众号
-     * punishmentInfo行政处罚
-     * purchaseLand购地信息
-     * searchV2搜索接口
-     * taxCredit税务评级
-     * trademarks商标信息
-     * websiteApprove网站备案
-     * allCompanies人物所在企业
-     * partners人物所有合作伙伴
-     * roles人物所在企业职位角色
-     * associationMap关系图
-     * companyholding实际控制权
-     * profile企业简介
-     * humanholding最终受益人
-     * copyRegWorks作品著作权
-     * companyInfo上市企业简介
-     * seniorExecutive高管信息
-     * findJingpin竞品信息
-     * getProductInfo企业业务
-     * findTeamMember核心团队
-     * liquidating清算信息
-     * importAndExport进出口信用
-     * appbkInfo产品信息
-     * judicial司法协助
-     * bond债券信息
-     * issueRelated发行相关
-     * pastMortgageInfo历史动产抵押
-     * pastLicense历史行政许可
-     * pastEquityInfo历史股权出质
-     * pastZhixing历史被执行人
-     * pastDishonest历史失信人
-     * pastCourt历史法院公告
-     * pastLawsuit历史法律诉讼
-     * pastInvest历史对外投资
-     * pastHolder历史股东信息
-     * pastIc历史工商信息
-     * pastPunishment历史行政处罚
-     * shareStructure股本结构
-     * equityChange股本变动
-     * allotmen配股情况
-     * pastAnnouncement历史开庭公告
-     * bonusInfo分红情况
-     * riskInfo企业风险
-     * riskDetail风险信息
-     * logo获取无水印logo
-	 * mainPerson主要人员
- */

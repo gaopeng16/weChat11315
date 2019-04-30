@@ -20,8 +20,23 @@
         <span
           @click="showMoreDescription"
           class="look-more font-click text-center"
-        >查看更多∧</span>
+        >查看更多&gt;</span>
       </div>
+    </div>
+    <!-- 企信风险 -->
+    <div class="qx-risk">
+      <div class="risk-icon left">
+        <img v-if="imgUrl" :src="imgUrl+'icon_risk.png'">
+      </div>
+      <div class="left qrl">
+        <div class="risk left">周边风险:</div>
+        <span class="risk-num left">{{zbRiskSum}}条</span>
+        <div class="risk left">预警提示:</div>
+        <span class="risk-num left">{{yjRiskSum}}条</span>
+      </div>
+      <a :href="'/pages/manRisk/main?humanName='+humanName+'&name='+companyName">
+        <div class="look-risk right">查看风险</div>
+      </a>
     </div>
     <div class="mengban" v-if="lookMore">
       <div class="con relative">
@@ -256,7 +271,9 @@ export default {
       partners: [], // 合作伙伴
       holderList: [], // 股东
       legalList: [], //法人
-      officeList: [] //高管
+      officeList: [], //高管
+      zbRiskSum: 0, //周边风险总数
+      yjRiskSum: 0 //预警提示总数
     };
   },
   methods: {
@@ -291,6 +308,27 @@ export default {
           }
         });
     },
+    // 人风险
+    getHumanRisk() {
+      this.$http
+        .get(config.human, {
+          uri:
+            "https://open.api.tianyancha.com/services/v3/newopen/description.json?humanName=" +
+            this.humanName +
+            "&name=" +
+            this.companyName,
+          companyName: this.companyName,
+          human: this.humanName,
+          urlType: "humanRiskInfo"
+        })
+        .then(res => {
+          if (res.data.reason == "ok") {
+            let data = res.data.result;
+            this.zbRiskSum = data[0].count;
+            this.yjRiskSum = data[1].count;
+          }
+        });
+    },
     //人员商业角色
     getRoles() {
       this.$http
@@ -306,7 +344,6 @@ export default {
         })
         .then(res => {
           if (res.data.reason === "ok") {
-            console.log("角色", res);
             this.holderList = res.data.result.holderList.map(item => {
               item.estiblishTime = item.estiblishTime
                 ? formatTime(new Date(item.estiblishTime), 0)
@@ -499,6 +536,7 @@ export default {
     this.getRoles();
     this.getDescription();
     this.getPartners();
+    this.getHumanRisk();
     // this.getAllCompanys();
   }
 };
@@ -587,7 +625,7 @@ scroll-view {
   }
 }
 .currentScroll-box {
-  border-top: 15rpx solid #dddee1;
+  border-top: 10rpx solid #dddee1;
 }
 .currentScroll-box-fixed {
   position: fixed;
@@ -657,6 +695,48 @@ scroll-view {
   padding-top: 20rpx;
   .partner-com {
     margin-left: 110rpx;
+  }
+}
+// 企信风险
+.qx-risk {
+  width: 98%;
+  height: 80rpx;
+  background: #ffffff;
+  margin: 15rpx 1%;
+  font-size: 12px;
+  border-top: solid 10rpx #dddee1;
+  .qrl {
+    margin-top: 28rpx;
+  }
+  .risk-icon {
+    margin-left: 10rpx;
+    margin-top: 10rpx;
+    img {
+      width: 80rpx;
+      height: 68rpx;
+    }
+  }
+  .risk {
+    margin: 0 10rpx;
+    line-height: 40rpx;
+  }
+  .risk-num {
+    display: block;
+    box-sizing: border-box;
+    padding: 0 10rpx;
+    line-height: 30rpx;
+    border: solid 1px #ff3030;
+    background: #ffd7d5;
+    color: #ff3030;
+    margin-top: 5rpx;
+  }
+  .look-risk {
+    padding: 0 10rpx;
+    line-height: 40rpx;
+    margin-top: 28rpx;
+    margin-right: 10rpx;
+    color: #ff3030;
+    border: solid 1px #ff3030;
   }
 }
 </style>

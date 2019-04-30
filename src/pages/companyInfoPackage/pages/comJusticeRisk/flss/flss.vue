@@ -73,9 +73,13 @@ export default {
           type: "lawSuit"
         })
         .then(res => {
-          //console.log("res-->", res);
           if (res.data.code == 0) {
-            const result = res.data.data.laws;
+            const result = res.data.data.laws.map(item => {
+              item.pubDate = item.pubDate
+                ? formatTime(new Date(item.pubDate), 0)
+                : "--";
+              return item;
+            });
             if (
               (init && this.total <= config.pageSize) ||
               (result.length < config.pageSize && this.page > 1)

@@ -89,7 +89,11 @@ export default {
         .then(res => {
           console.log("res-->", res);
           if (res.data.code == 0) {
-            const result = res.data.data.equityInfo;
+            const result = res.data.data.equityInfo.map(item => {
+              item.putDate = item.pubDate ? item.putDate.substr(0, 10) : "--";
+              item.regDate = item.regDate ? item.regDate.substr(0, 10) : "--";
+              return item;
+            });
             if (
               (init && this.total <= config.pageSize) ||
               (result.length < config.pageSize && this.page > 1)

@@ -9,7 +9,7 @@
         loop
         speed="1500"
       ></i-notice-bar>
-    </div> -->
+    </div>-->
     <div class="home-banner">
       <img class="com-title" mode="aspectFit" v-if="imgUrl" :src="imgUrl+'home_ic_top_01.png'">
       <img
@@ -203,15 +203,43 @@
         <img mode="aspectFix" v-if="imgUrl" :src="imgUrl+'ic_home_invitation.png'">
       </a>
     </div>
+    <div class="daily-con" v-if="dailyData">
+      <div class="daily-tips">
+        <div class="dt-title title text-center bold">监控日报</div>
+        <p class="sub-content">{{dailyTipsTitle}}</p>
+        <div :key="k" v-for="(v,k) in dailyTips">
+          <div v-if="k < 2">
+            <div class="dt-name title">{{v.companyName}}</div>
+            <div class="radar sub-content">{{v.radarType}}</div>
+          </div>
+          <div class="shengluo" v-if="k >= 2">
+            <span></span>
+            <span></span>
+            <span></span>
+          </div>
+        </div>
+        <div class="dt-btn">
+          <div class="dt-know" @click="dtKnow()">知道了</div>
+          <div class="dt-look" @click="dtLook()">立即查看</div>
+        </div>
+      </div>
+    </div>
     <i-modal title="提示" :visible="!isLogin" @ok="goLogin" @cancel="noLogin">
       <div>请先登录</div>
+    </i-modal>
+    <i-modal title="提示" :visible="loginInOther" @ok="goLogin" @cancel="noLogin">
+      <div>账号已在其他设备登录，您被强制下线！</div>
     </i-modal>
   </div>
 </template>
 <script>
 import config from "@/config";
 import { mapState, mapMutations } from "vuex";
-import { SET_PASS_ON_OFF } from "@/store/mutation-types";
+import {
+  SET_PASS_ON_OFF,
+  SET_VIPLEVEL,
+  SET_SIGN
+} from "@/store/mutation-types";
 import ColumnTitle from "@/components/ColumnTitle";
 import BriefCard from "@/components/BriefCard";
 import NavigateBar from "@/components/NavigateBar";
@@ -229,15 +257,21 @@ export default {
       creditNewsList: [],
       creditNewsListUrl: "/pages/creditNewsList/main",
       hotBotArr: [], // 热搜
-      isLogin: true
+      isLogin: true,
+      loginInOther: false,
+      dailyTipsTitle: "",
+      dailyTips: [],
+      dailyData: false
     };
   },
   computed: {
-    ...mapState(["navHeight", "passOnOff"])
+    ...mapState(["navHeight", "passOnOff", "token"])
   },
   methods: {
     ...mapMutations({
-      setPassOnOff: SET_PASS_ON_OFF
+      setPassOnOff: SET_PASS_ON_OFF,
+      setVipLevel: SET_VIPLEVEL,
+      setSign: SET_SIGN
     }),
     //初始化
     getSetting() {
@@ -419,6 +453,80 @@ export default {
             }
           }
         });
+    },
+    // 重置登录信息
+    resetLoginInfo() {
+      let _this = this;
+      this.checkLogin();
+      if (this.isLogin) {
+        this.$http
+          .post(config.host + config.loginState, {
+            userId: this.userId
+          })
+          .then(res => {
+            if (res.data.code == 0) {
+              const bussUser = res.data.data.bussUser;
+              const loginInfo = {
+                userId: bussUser.id,
+                mobile: bussUser.mobile,
+                headPic: bussUser.headPic,
+                vipLevel: bussUser.vipLevel,
+                expireDate: bussUser.expireDate
+              };
+              wx.setStorageSync("loginInfo", loginInfo);
+              _this.setVipLevel(loginInfo.vipLevel);
+              _this.setSign(res.data.data.sign);
+            }
+          });
+      }
+    },
+    // 检查是否异地登录
+    isLoginInOther() {
+      console.log(1)
+      this.checkLogin();
+      this.loginInOther = false;
+      if (this.isLogin) {
+        this.$http
+          .post(config.loginState, {
+            userId: this.userId
+          })
+          .then(res => {
+            console.log('1->'+this.token,'2->',res)
+            if (res.data.code == 0) {
+              if (this.token != res.data.data.token) {
+                wx.removeStorageSync("vuex");
+                wx.removeStorageSync("loginInfo");
+                this.loginInOther = true;
+              } else {
+                this.loginInOther = false;
+              }
+            }
+          });
+      }
+    },
+    // 监控动态提示
+    queryRadarDailyTips() {
+      this.$http
+        .get(config.host + config.queryRadarDailyTips, { userId: this.userId })
+        .then(res => {
+          if (res.data.code == 0) {
+            if (Object.keys(res.data.data).length > 0) {
+              this.dailyData = true;
+              this.dailyTipsTitle = res.data.data.title;
+              this.dailyTips = res.data.data.comArr;
+            } else {
+              this.dailyData = false;
+            }
+          }
+        });
+    },
+    dtKnow() {
+      this.dailyData = false;
+    },
+    dtLook() {
+      wx.navigateTo({
+        url: "/pages/bussUserComMonitor/main"
+      });
     }
   },
   mounted() {
@@ -440,6 +548,9 @@ export default {
   },
   onShow() {
     this.getPromission();
+    this.resetLoginInfo();
+    this.isLoginInOther();
+    this.queryRadarDailyTips();
   }
 };
 </script>
@@ -630,6 +741,81 @@ body {
     img {
       max-width: 100%;
       max-height: 100%;
+    }
+  }
+}
+.daily-con {
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  .daily-tips {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    top: 0;
+    right: 0;
+    margin: auto;
+    padding: 10rpx;
+    width: 70%;
+    height: 400rpx;
+    background: #fff;
+    border-radius: 26rpx;
+    .dt-title {
+      line-height: 60rpx;
+    }
+    p.sub-content {
+      left: 60rpx;
+      text-indent: 15rpx;
+    }
+    .dt-name {
+      height: 46rpx;
+      line-height: 46rpx;
+      vertical-align: middle;
+      overflow: hidden;
+      text-indent: 20rpx;
+    }
+    .radar {
+      font-size: 26rpx;
+      text-indent: 20rpx;
+    }
+    .shengluo {
+      overflow: hidden;
+      margin-top: 20rpx;
+      padding-left: 30rpx;
+      span {
+        display: block;
+        width: 6rpx;
+        height: 6rpx;
+        border-radius: 50%;
+        background: #495060;
+        margin-right: 8rpx;
+        float: left;
+      }
+    }
+    .dt-btn {
+      overflow: hidden;
+      margin-top: 40rpx;
+      div {
+        box-sizing: border-box;
+        width: 40%;
+        line-height: 60rpx;
+        text-align: center;
+        border-radius: 10rpx;
+        float: left;
+      }
+      .dt-know {
+        border: solid 1px #209bf9;
+        color: #209bf9;
+        margin-left: 7%;
+      }
+      .dt-look {
+        background: #209bf9;
+        color: #ffffff;
+        margin-left: 5%;
+      }
     }
   }
 }

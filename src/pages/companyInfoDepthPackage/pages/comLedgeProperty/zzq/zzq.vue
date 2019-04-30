@@ -90,7 +90,7 @@ export default {
   data() {
     return {
       title: "知识产权",
-      subTitle: "专利",
+      subTitle: "著作权",
       total: "",
       bt1: "登记日期",
       current: "tab1",

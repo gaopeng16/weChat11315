@@ -2,7 +2,7 @@
   <div class="default-bg min-height100">
     <ToDepthSearch
       :url="'/pages/companyInfoDepthPackage/pages/comOperateStatus/jckxy/main'"
-      v-if="Object.keys(data).length <=0"
+      v-if="data == ''"
     ></ToDepthSearch>
     <div v-else>
       <DepthSearch :url="'/pages/companyInfoDepthPackage/pages/comOperateStatus/jckxy/main'"></DepthSearch>
@@ -172,8 +172,10 @@ export default {
         .then(res => {
           if (res.data.code == 0) {
             const result = res.data.data.importAndExport;
-            result.regDate = result.regDate.substr(0, 10);
-            result.validity = result.validity.substr(0, 10);
+            if (result) {
+              result.regDate = result.regDate.substr(0, 10);
+              result.validity = result.validity.substr(0, 10);
+            }
             this.data = result;
           }
         });

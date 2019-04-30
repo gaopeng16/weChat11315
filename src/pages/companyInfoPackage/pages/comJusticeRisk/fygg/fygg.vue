@@ -77,9 +77,13 @@ export default {
           type: "courtAnnouncement"
         })
         .then(res => {
-          //console.log("res-->", res);
           if (res.data.code == 0) {
-            const result = res.data.data.notices;
+            const result = res.data.data.notices.map(item => {
+              item.noticeDate = item.noticeDate
+                ? formatTime(new Date(item.noticeDate), 0)
+                : "--";
+              return item;
+            });
             if (
               (init && this.total <= config.pageSize) ||
               (result.length < config.pageSize && this.page > 1)

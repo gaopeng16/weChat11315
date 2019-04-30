@@ -23,11 +23,8 @@ export default {
   },
   computed: {
     companyId() {
-      return store.state.companyDetailsData.basicInfo.basic.id;
+      return this.$store.state.companyId;
     }
-  },
-  mounted() {
-    console.log(this.companyId);
   }
 };
 </script>

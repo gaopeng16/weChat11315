@@ -57,7 +57,7 @@ export default {
   data() {
     return {
       title: "司法风险",
-      subTitle: "法律诉讼详情",
+      subTitle: "开庭公告详情",
       total: "",
       bt: "案由"
     };

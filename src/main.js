@@ -15,6 +15,7 @@ fly.interceptors.request.use((request) => {
   if (userId) {
     if (request.body) {
       request.body["userId"] = userId
+      request.body["device"] = "minpro"
     }
 
   }

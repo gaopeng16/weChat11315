@@ -1,7 +1,8 @@
 <template>
   <div class="companyinfo-body" :class="[showAllBiref?'no-scroll-body':'']">
     <Vip v-if="showByVip"></Vip>
-    <div class="deep-search" @click="comDepthSearch(companyName)">深度
+    <div class="deep-search" @click="comDepthSearch(companyName)">
+      深度
       <br>查询
     </div>
     <!-- 公司简介部分 -->
@@ -20,17 +21,20 @@
         </div>
       </div>
       <div class="item-info-box">
-        <div class="item-info sub-content-light left">法定代表人
+        <div class="item-info sub-content-light left">
+          法定代表人
           <br>
           <span class="font-click" @click="goManInfo(legalPerson)">{{legalPerson}}</span>
         </div>
         <div class="div-line left"></div>
-        <div class="item-info sub-content-light left">注册资本
+        <div class="item-info sub-content-light left">
+          注册资本
           <br>
           <span class="title">{{registeredCapital}}</span>
         </div>
         <div class="div-line left"></div>
-        <div class="item-info sub-content-light left">成立日期
+        <div class="item-info sub-content-light left">
+          成立日期
           <br>
           <span class="title">{{registrationDate}}</span>
         </div>
@@ -69,7 +73,8 @@
           <img v-if="imgUrl" :src="imgUrl+'set_call.png'">
           {{contactWay}}
         </div>
-        <div class="show-info" @click="showAllContactInfo">联系信息
+        <div class="show-info" @click="showAllContactInfo">
+          联系信息
           <i-icon :type="isShowAllContactInfo ? 'unfold': 'enter'"/>
         </div>
       </div>
@@ -173,10 +178,14 @@
       <div class="risk-icon left">
         <img v-if="imgUrl" :src="imgUrl+'icon_risk.png'">
       </div>
-      <div class="risk left">自身风险:</div>
-      <span class="risk-num left">{{selfRisk}}条</span>
-      <div class="risk left">周边风险:</div>
-      <span class="risk-num left">{{aroundRisk}}条</span>
+      <div class="left">
+        <div class="risk left">自身风险:</div>
+        <span class="risk-num left">{{selfRisk}}条</span>
+        <div class="risk left">周边风险:</div>
+        <span class="risk-num left">{{aroundRisk}}条</span>
+        <div class="risk left" style="clear:left">预警提示:</div>
+        <span class="risk-num left">{{yjtxRisk}}条</span>
+      </div>
       <a :href="'/pages/companyInfoPackage/pages/comBascInfo/qxfx/main?companyId='+companyId">
         <div class="look-risk right">查看风险</div>
       </a>
@@ -509,7 +518,9 @@
         </i-col>
         <!-- 股权结构 -->
         <i-col span="11" offset="1">
-          <a href="/pages/companyInfoPackage/pages/comBascInfo/gqjgt/main">
+          <a
+            :href="'/pages/companyInfoPackage/pages/comBascInfo/gqjgt/main?companyId='+companyId+'&companyName='+companyName"
+          >
             <div class="plate-line">
               <div class="item-img-box left">
                 <img class="item-img" mode="aspectFit" v-if="imgUrl" :src="imgUrl+'ic_gv1_9.png'">
@@ -1048,7 +1059,7 @@
           <!-- 产品信息 -->
           <i-col span="11" offset="1">
             <a
-              :href="'/pages/companyInfoPackage/pages/comOperateStatus/app/main?companyId='+companyId+'&total='+appTotalss"
+              :href="'/pages/companyInfoPackage/pages/comOperateStatus/app/main?companyId='+companyId+'&total='+appTotal"
             >
               <div class="plate-line">
                 <div class="item-img-box left">
@@ -1427,6 +1438,9 @@
         </i-col>
       </i-row>
     </div>
+    <i-modal title="提示" :visible="!isSvip" @ok="goBuySvip" @cancel="cancel">
+      <div>SVIP专享，前去购买</div>
+    </i-modal>
     <i-toast id="toast"/>
   </div>
 </template>
@@ -1452,6 +1466,7 @@ export default {
       isShowAllContactInfo: false,
       userId: "",
       showByVip: false,
+      isSvip: true,
       isListed: false, // 是否是上市公司
       companyId: "",
       companyName: "", // 公司名称
@@ -1473,6 +1488,7 @@ export default {
       score: 0, // 评分
       selfRisk: 0, //自身风险统计
       aroundRisk: 0, //周边风险统计
+      yjtxRisk: 0, // 预警提示
 
       shareholder: [], //股东
       mainPerson: [], //董监高
@@ -1696,11 +1712,11 @@ export default {
             this.lat = comExpandData.longitude.split(",")[1];
             if (comExpandData.longitude) {
               this.hasLongitude = true;
-              this.setCompanyName(this.companyName);
-              this.setCompanyId(this.companyId);
             } else {
               this.hasLongitude = false;
             }
+            this.setCompanyName(this.companyName);
+            this.setCompanyId(this.companyId);
           }
         });
     },
@@ -1789,30 +1805,25 @@ export default {
             this.hisGqczTotal = historyCount.hxEquityinfoCount; //  历史信息-股权出质统计
             this.hisXzxkTotal = historyCount.hxLicenceCount; //  历史信息-行政许可统计
             this.hisDcdyTotal = historyCount.hxBaseInfoCount; //  历史信息-动产抵押统计
+
+            this.fxRisk();
           }
         });
     },
-    //企信风险统计
-    otherRiskForApp() {
+    // 企信风险统计
+    fxRisk() {
       this.$http
-        .get("app/search/otherRiskForApp", {
-          termStr: this.companyId,
-          page: 1,
-          pageSize: config.pageSize,
-          type: "me"
+        .get(config.companyName, {
+          uri: config.riskInfo + this.companyName,
+          pageSize: 0,
+          pageNum: 1
         })
         .then(res => {
-          this.selfRisk = res.data.zwfx;
-        });
-      this.$http
-        .get("app/search/otherRiskForApp", {
-          termStr: this.companyId,
-          page: 1,
-          pageSize: config.pageSize,
-          type: "other"
-        })
-        .then(res => {
-          this.aroundRisk = res.data.zwfx;
+          if (res.data.reason == "ok") {
+            this.selfRisk = res.data.result[0].count;
+            this.aroundRisk = res.data.result[1].count;
+            this.yjtxRisk = res.data.result[2].count;
+          }
         });
     },
     // 企业周边企业
@@ -1852,13 +1863,27 @@ export default {
     },
     // 跳转到人物详情页
     goManInfo(name) {
+      if (this.vipLevel == 5) {
+        wx.navigateTo({
+          url:
+            "/pages/manInfo/main?humanName=" +
+            name +
+            "&companyName=" +
+            this.companyName
+        });
+      } else {
+        this.isSvip = false;
+      }
+    },
+    // 去购买svip
+    goBuySvip() {
       wx.navigateTo({
-        url:
-          "/pages/manInfo/main?humanName=" +
-          name +
-          "&companyName=" +
-          this.companyName
+        url: "/pages/meOptions/vipPrivilege/main"
       });
+    },
+    // 不去购买svip
+    cancel() {
+      this.isSvip = true;
     },
     //跳转详情页
     companyInfo(companyId) {
@@ -2038,10 +2063,17 @@ export default {
     this.comBasic();
     this.comHead();
     this.count();
-    this.otherRiskForApp();
     this.hasMonitoring();
     this.hasFollowed();
     this.exitClaim();
+  },
+  onShareAppMessage: function() {
+    return {
+      title: "我发现一款给力的信用调查小程序，超好用！棒棒哒！",
+      path:
+        "/pages/companyInfoPackage/pages/companyInfo/main?companyId=" +
+        this.companyId
+    };
   },
   onShow() {
     // 每次打开页面判断是否深度过，如果深度过就重新获取一遍数据
@@ -2053,6 +2085,7 @@ export default {
       this._isDepth(false);
     }
     this.showByVip = false;
+    this.isSvip = true;
   }
 };
 </script>
@@ -2361,16 +2394,17 @@ export default {
     }
     .risk {
       margin: 0 10rpx;
-      line-height: 80rpx;
+      line-height: 40rpx;
     }
     .risk-num {
       display: block;
+      box-sizing: border-box;
       padding: 0 10rpx;
       line-height: 30rpx;
       border: solid 1px #ff3030;
       background: #ffd7d5;
       color: #ff3030;
-      margin-top: 25rpx;
+      margin-top: 5rpx;
     }
     .look-risk {
       padding: 0 10rpx;

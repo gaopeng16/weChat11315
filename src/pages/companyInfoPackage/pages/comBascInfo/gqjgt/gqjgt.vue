@@ -7,6 +7,7 @@
 </template>
 <script>
 import store from "@/store";
+import {mapState} from 'vuex';
 import config from "@/config.js";
 import SubTitle from "@/components/SubTitle";
 import BlockTitle from "@/components/BlockTitle";
@@ -25,7 +26,6 @@ export default {
   mounted() {
     this.companyId = this.$root.$mp.query.companyId;
     this.companyName = this.$root.$mp.query.companyName;
-    console.log(this.companyId,this.companyName)
   }
 };
 </script>

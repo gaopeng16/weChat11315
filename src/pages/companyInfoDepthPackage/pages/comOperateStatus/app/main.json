@@ -1,5 +1,5 @@
 {
-  "navigationBarTitleText": "经营状况(深度查询)",
+  "navigationBarTitleText": "产品信息(深度查询)",
   "enablePullDownRefresh": true,
   "usingComponents": {
     "i-load-more": "../../../../../static/iview/load-more/index",

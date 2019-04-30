@@ -75,7 +75,8 @@
             </div>
           </i-col>
           <i-col span="8">
-            <div @click="showAdvancedFilter">高级筛选
+            <div @click="showAdvancedFilter">
+              高级筛选
               <i-icon :type="filter"></i-icon>
             </div>
           </i-col>
@@ -275,19 +276,22 @@
             <!-- <div class="type left ml10">小微企业</div> -->
           </div>
           <div class="item-info-box">
-            <div class="item-info sub-content-light left">法定代表人
+            <div class="item-info sub-content-light left">
+              法定代表人
               <br>
               <span class="font-click">
                 <rich-text type="text" :nodes="item.legalPerson"></rich-text>
               </span>
             </div>
             <div class="div-line left"></div>
-            <div class="item-info sub-content-light left">注册资本
+            <div class="item-info sub-content-light left">
+              注册资本
               <br>
               <span class="title">{{item.registeredCapital+item.registeredCapitalUnit}}</span>
             </div>
             <div class="div-line left"></div>
-            <div class="item-info sub-content-light left">成立日期
+            <div class="item-info sub-content-light left">
+              成立日期
               <br>
               <span class="title">{{item.registrationDate}}</span>
             </div>
@@ -338,6 +342,9 @@
     <i-toast id="toast"/>
     <i-modal title="提示" :visible="!isLogin" :actions="actions" @click="goLogin">
       <div>请先登录</div>
+    </i-modal>
+    <i-modal title="提示" :visible="loginInOther" @ok="goLogin" @cancel="noLogin">
+      <div>账号已在其他设备登录，您被强制下线！</div>
     </i-modal>
   </div>
 </template>
@@ -437,11 +444,13 @@ export default {
       sbIndex: 0,
       zlIndex: 0,
       sxIndex: 0,
-      lxIndex: 0
+      lxIndex: 0,
+
+      loginInOther: false
     };
   },
   computed: {
-    ...mapState(["vipLevel"])
+    ...mapState(["vipLevel", "token"])
   },
   methods: {
     myToast(con, type) {
@@ -906,6 +915,32 @@ export default {
           break;
       }
     },
+    //不同意登录
+    noLogin() {
+      this.loginInOther = false;
+    },
+    // 检查是否异地登录
+    isLoginInOther() {
+      this.checkLogin();
+      this.loginInOther = false;
+      if (this.isLogin) {
+        this.$http
+          .post(config.host + config.loginState, {
+            userId: this.userId
+          })
+          .then(res => {
+            if (res.data.code == 0) {
+              if (this.token != res.data.data.token) {
+                wx.removeStorageSync("vuex");
+                wx.removeStorageSync("loginInfo");
+                this.loginInOther = true;
+              } else {
+                this.loginInOther = false;
+              }
+            }
+          });
+      }
+    },
     // 搜索参数数据重置
     searchDataInit() {
       this.area = "全国";
@@ -930,12 +965,19 @@ export default {
     this._getRecentSearch();
     this.setIndustryParent();
   },
+  onShareAppMessage: function() {
+    return {
+      title: "我发现一款给力的信用调查小程序，超好用！棒棒哒！",
+      path: "/pages/search/main"
+    };
+  },
   onShow() {
     this.searchDataInit();
     this.getArea();
     this.checkLogin();
     this.keyWord = "";
     this.getSearchType();
+    this.isLoginInOther();
   },
   watch: {
     keyWord: function(val, oldVal) {

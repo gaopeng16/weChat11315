@@ -133,26 +133,6 @@ export default {
     chooseWeChat() {
       this.payStyle = 2;
     },
-    // 校验邀请码
-    invitationCodeIsLegal() {
-      this.$http
-        .get(config.invitationCodeIsLegal, {
-          invitationCode: this.inviteCode,
-          type: this.productId,
-          userId: this.userId
-        })
-        .then(res => {
-          if (res.data.code == 0) {
-            this.payMoney = (
-              this.payMoney -
-              this.invitePrice * this.discount
-            ).toFixed(2);
-          } else {
-            this.inviteCode = "";
-            this.myToast(res.data.message, "warning");
-          }
-        });
-    },
     // 去支付
     toPay() {
       let param = {};
@@ -212,34 +192,58 @@ export default {
             .map(item => {
               item.actualPrice = Number(item.actualPrice) / 100;
               item.price = Number(item.price) / 100;
-              this.payMoney =
-                item.code == "1003" ? item.actualPrice * this.discount : 0;
               return item;
             })
             .reverse();
         }
       });
     },
+    // 检查验证码是否可用以及获取 需要支付所显示的额价格
+    checkYzmAndShowPrice(yz) {
+      var param = {};
+      if (this.inviteCode != "") {
+        param = {
+          userId: this.userId,
+          type: this.productId,
+          invitationCode: this.inviteCode
+        };
+      } else {
+        param = {
+          userId: this.userId,
+          type: this.productId
+        };
+      }
+      this.$http
+        .get(config.host + "/app/buss/user/payablePrice", param)
+        .then(res => {
+          if (yz) {
+            if (res.data.data.flag == 0) {
+              this.myToast("验证码可用", "success");
+            } else {
+              this.myToast(res.data.data.message, "warning");
+            }
+          }
+          if (res.data.code == 0) {
+            this.payMoney = res.data.data.price;
+          }
+        });
+    },
     // 选择vip类型
     choosePrice(actualPrice, productId, k) {
       this.productId = productId;
       this.choosePriceIndex = k;
-      this.payMoney = actualPrice * this.discount;
-      if (this.inviteCode != "") {
-        this.invitationCodeIsLegal();
-      }
+      this.checkYzmAndShowPrice();
     }
   },
   mounted() {
     this.invitePrice = config.invitePrice;
     this.getLoginInfo();
     this.getProductByCode();
+    this.checkYzmAndShowPrice();
   },
   watch: {
     inviteCode: function(val, oldVal) {
-      if (val.length == 6) {
-        this.invitationCodeIsLegal();
-      }
+      this.checkYzmAndShowPrice(true);
     }
   }
 };

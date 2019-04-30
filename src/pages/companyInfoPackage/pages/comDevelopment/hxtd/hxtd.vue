@@ -8,9 +8,15 @@
       <DepthSearch :url="'/pages/companyInfoDepthPackage/pages/comDevelopment/hxtd/main'"></DepthSearch>
       <SubTitle :title="title" :subTitle="subTitle" :total="total"></SubTitle>
       <!--  -->
-      <div class="block-shadow-content overflow-hidden" :key="index" v-for="(item,index) in data">
+      <div
+        class="block-shadow-content overflow-hidden"
+        :key="index"
+        v-for="(item,index) in data"
+        @click="hxtdDetail(item)"
+      >
         <div class="core-term-face left">
-          <img v-if="imgUrl" :src="imgUrl+'logo_n.png'">
+          <img v-if="imgFile && item.personFace" :src="imgFile+item.personFace">
+          <img v-else-if="imgUrl" :src="imgUrl+'logo_n.png'">
         </div>
         <div class="core-term-right left">
           <div class="title lh70 font-click blod">{{item.personName}}</div>
@@ -46,10 +52,17 @@ import ToDepthSearch from "@/components/ToDepthSearch";
 import DepthSearch from "@/components/DepthSearch";
 import Share from "@/components/Share";
 export default {
-  components: { SubTitle, BlockTitle, ToDepthSearch, DepthSearch, Share },
+  components: {
+    SubTitle,
+    BlockTitle,
+    ToDepthSearch,
+    DepthSearch,
+    Share
+  },
   data() {
     return {
       imgUrl: config.imgUrl,
+      imgFile: config.imgFile,
       title: "企业发展",
       subTitle: "核心团队",
       total: "",
@@ -95,6 +108,12 @@ export default {
             }
           }
         });
+    },
+    hxtdDetail(item) {
+      store.commit("setDevelopmentHxtdDetailData", item);
+      wx.navigateTo({
+        url: "/pages/companyInfoPackage/pages/comDevelopment/hxtdDetail/main"
+      });
     }
   },
   onPullDownRefresh() {
@@ -142,6 +161,11 @@ export default {
       margin: 0 15rpx 0 0;
       color: #ffffff;
     }
+  }
+  .sub-content {
+    line-height: 36rpx;
+    max-height: 178rpx;
+    overflow: hidden;
   }
 }
 .red {

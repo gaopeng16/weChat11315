@@ -1,5 +1,5 @@
 {
-  "navigationBarTitleText": "上市信息(深度查询)",
+  "navigationBarTitleText": "分红情况(深度查询)",
   "enablePullDownRefresh": true,
   "usingComponents": {
     "i-row": "../../../../../static/iview/row/index",

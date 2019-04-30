@@ -97,6 +97,8 @@ export default {
             } else {
               this.noData = true;
             }
+          } else {
+            this.noData = true;
           }
         });
     }

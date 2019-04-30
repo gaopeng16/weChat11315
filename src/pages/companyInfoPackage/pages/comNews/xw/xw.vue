@@ -70,9 +70,11 @@ export default {
           type: "news"
         })
         .then(res => {
-          // console.log("res-->", res);
           if (res.data.code == 0) {
-            const result = res.data.data.news;
+            const result = res.data.data.news.map(item => {
+              item.time = item.time ? item.time.substr(0, 10) : "--";
+              return item;
+            });
             if (
               (init && this.total <= config.pageSize) ||
               (result.length < config.pageSize && this.page > 1)

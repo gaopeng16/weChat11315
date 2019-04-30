@@ -6,6 +6,8 @@ export const SET_COMPANY_ID = 'setCompanyId'
 
 export const SET_SIGN = "setSign"
 
+export const SET_TOKEN = "setToken"
+
 export const SET_VIPLEVEL = "setVipLevel"
 
 export const SET_IS_DEPTH = "isDepth"
@@ -13,6 +15,10 @@ export const SET_IS_DEPTH = "isDepth"
 export const SET_NAV_HEIGHT = "navHeight"
 
 export const SET_JUDGMENT_CONTENT = "setJudgmentContent"
+
+export const SET_DAILY_REPORT = 'SET_DAILY_REPORT'
+
+export const SET_MONITOR_DETAIL = 'SET_MONITOR_DETAIL'
 
 export const SET_DETAIL_CONTENT = "setDetailContent"
 
@@ -37,6 +43,8 @@ export const SET_COURT_SESSION_DETAIL_DATA = "setCourtSessionDetailData"
 export const SET_COURT_DISHONESTY_DETAIL_DATA = "setCourtDishonestyDetailData"
 
 export const SET_JUDICIAL_DETAIL_DATA = "setJudicialDetailData"
+
+export const SET_DEVELOPMENT_HXTD_DETAIL_DATA = "setDevelopmentHxtdDetailData"
 
 export const SET_DEVELOPMENT_COMPETITION_DETAIL_DATA = "setDevelopmentCompetitionDetailData"
 
